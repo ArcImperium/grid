@@ -32,7 +32,7 @@ function App() {
     <div className="layer" style={{cursor: cursorType}}>
       <div className="sidebar">
         <div style={{height: '5%'}}></div>
-        {!mode0 && (<button className="mode-button" onClick={() => {setMode0(true); setMode1(false); setMode2(false); setCursorType('default')}}>SELECT</button>)}
+        {!mode0 && (<button className="mode-button" onClick={() => {setMode0(true); setMode1(false); setMode2(false); setCursorType('default'); setPaint()}}>SELECT</button>)}
         {mode0 && (<button className="mode-button not">SELECT</button>)}
         {!mode1 && (<button className="mode-button" onClick={() => {setMode0(false); setMode1(true); setMode2(false); setCursorType('crosshair'); setPaint()}}>PAINT</button>)}
         {mode1 && (<button className="mode-button not">PAINT</button>)}
@@ -46,7 +46,8 @@ function App() {
         <Stage0 stage={stage} setStage={setStage} color={color} size={size} mode0={mode0}/>
       </div>
       <div className="painter-tool">
-        <input type="color" value={color} onChange={(e) => {if (mode0) {setColor(e.target.value); setPrevColor(e.target.value)}}} className="color-picker"/>
+        {mode0 && (<input type="color" value={color} onChange={(e) => {setColor(e.target.value); setPrevColor(e.target.value)}} className="color-picker"/>)}
+        {!mode0 && (<div className="color-picker-fake" style={{backgroundColor: color}}></div>)}
         <input type="range" min="1" max="20" step="1" value={size} onChange={(e) => {if (mode0) {setSize(e.target.value)}}} className="size-picker"/>
         <h2 className="size">Size: {size}</h2>
       </div>

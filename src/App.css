@@ -81,7 +81,6 @@
   top: 5%;
   left: 10%;
 
-  border: transparent;
   padding: 0;
   border-radius: 25px;
   border: 5px solid cornflowerblue;
@@ -93,12 +92,37 @@
   border-color: transparent;
 }
 
+.color-picker-fake {
+  position: absolute;
+  height: 48%;
+  width: 75%;
+  top: 5%;
+  left: 10%;
+
+  padding: 0;
+  border-radius: 25px;
+  border: 5px solid cornflowerblue;
+}
+
 .size-picker {
   position: absolute;
   height: 5%;
   width: 80%;
   top: 60%;
   left: 10%;
+  -webkit-appearance: none;
+}
+.size-picker::-webkit-slider-runnable-track {
+  background-color: white;
+  border-radius: 50px;
+  border: 5px solid cornflowerblue;
+}
+.size-picker::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  background-color: cornflowerblue;
+  height: 25px;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
 }
 
 .size {
