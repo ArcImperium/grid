@@ -24,6 +24,9 @@
 
   transition: transform 0.5s ease;
 }
+.mode-button.not {
+  background-color: lightsteelblue;
+}
 .mode-button:hover {
   transform: scale(1.1);
 }
@@ -42,6 +45,9 @@
   font-size: 25px;
 
   transition: transform 0.5s ease;
+}
+.back.not {
+  background-color: lightsteelblue;
 }
 .back:hover {
   transform: scale(1.1);
@@ -66,4 +72,42 @@
 
   background-color: white;
   border-radius: 30px;
+}
+
+.color-picker {
+  position: absolute;
+  height: 50%;
+  width: 80%;
+  top: 5%;
+  left: 10%;
+
+  border: transparent;
+  padding: 0;
+  border-radius: 25px;
+}
+.color-picker::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.grid {
+  position: absolute;
+  height: 50%;
+  width: 50%;
+}
+
+.grid.a {
+  top: 0;
+  left: 0;
+}
+.grid.b {
+  top: 0;
+  right: 0;
+}
+.grid.c {
+  bottom: 0;
+  left: 0;
+}
+.grid.d {
+  bottom: 0;
+  right: 0;
 }
