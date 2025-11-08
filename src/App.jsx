@@ -15,8 +15,17 @@ function App() {
 
   const [stage, setStage] = useState(0)
 
-  const [color, setColor] = useState("000000")
-  const [size, setSize] = useState(1)
+  const [color, setColor] = useState("#000000")
+  const [prevColor, setPrevColor] = useState("#000000")
+  const [size, setSize] = useState(2)
+
+  function setEraser() {
+    setPrevColor(color)
+    setColor("#ffffff")
+  }
+  function setPaint() {
+    setColor(prevColor)
+  }
 
   return (
     <>
@@ -25,9 +34,9 @@ function App() {
         <div style={{height: '5%'}}></div>
         {!mode0 && (<button className="mode-button" onClick={() => {setMode0(true); setMode1(false); setMode2(false); setCursorType('default')}}>SELECT</button>)}
         {mode0 && (<button className="mode-button not">SELECT</button>)}
-        {!mode1 && (<button className="mode-button" onClick={() => {setMode0(false); setMode1(true); setMode2(false); setCursorType('crosshair')}}>PAINT</button>)}
+        {!mode1 && (<button className="mode-button" onClick={() => {setMode0(false); setMode1(true); setMode2(false); setCursorType('crosshair'); setPaint()}}>PAINT</button>)}
         {mode1 && (<button className="mode-button not">PAINT</button>)}
-        {!mode2 && (<button className="mode-button" onClick={() => {setMode0(false); setMode1(false); setMode2(true); setCursorType('pointer')}}>ERASE</button>)}
+        {!mode2 && (<button className="mode-button" onClick={() => {setMode0(false); setMode1(false); setMode2(true); setCursorType('pointer'); setEraser()}}>ERASE</button>)}
         {mode2 && (<button className="mode-button not">ERASE</button>)}
         {((stage < 2) && mode0) && (<button className="back">BACK</button>)}
         {((stage === 2) || !mode0) && (<button className="back not">BACK</button>)}
@@ -37,8 +46,8 @@ function App() {
         <Stage0 stage={stage} setStage={setStage} color={color} size={size} mode0={mode0}/>
       </div>
       <div className="painter-tool">
-        <input type="color" value={color} onChange={(e) => setColor(e.target.value)} className="color-picker"/>
-        <input type="range" min="1" max="10" step="0.5" value={size} onChange={(e) => setSize(e.target.value)} className="size-picker"/>
+        <input type="color" value={color} onChange={(e) => {if (mode0) {setColor(e.target.value); setPrevColor(e.target.value)}}} className="color-picker"/>
+        <input type="range" min="1" max="20" step="1" value={size} onChange={(e) => {if (mode0) {setSize(e.target.value)}}} className="size-picker"/>
         <h2 className="size">Size: {size}</h2>
       </div>
     </div>
