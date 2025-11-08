@@ -16,7 +16,11 @@ function App() {
     <>
     <div className="layer" style={{cursor: cursorType}}>
       <div className="sidebar">
-
+        <div style={{height: '5%'}}></div>
+        <button className="mode-button" onClick={() => {setMode0(true); setMode1(false); setMode2(false); setCursorType('default')}}>SELECT</button>
+        <button className="mode-button" onClick={() => {setMode0(false); setMode1(true); setMode2(false); setCursorType('crosshair')}}>PAINT</button>
+        <button className="mode-button" onClick={() => {setMode0(false); setMode1(false); setMode2(true); setCursorType('pointer')}}>ERASE</button>
+        <button className="back">BACK</button>
       </div>
       <div className="grid-container">
 
