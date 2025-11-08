@@ -84,9 +84,31 @@
   border: transparent;
   padding: 0;
   border-radius: 25px;
+  border: 5px solid cornflowerblue;
 }
 .color-picker::-webkit-color-swatch-wrapper {
   padding: 0;
+}
+.color-picker::-webkit-color-swatch {
+  border-color: transparent;
+}
+
+.size-picker {
+  position: absolute;
+  height: 5%;
+  width: 80%;
+  top: 60%;
+  left: 10%;
+}
+
+.size {
+  position: absolute;
+  height: 5%;
+  width: 100%;
+  top: 65%;
+  left: 0;
+  text-align: center;
+  font-size: 25px;
 }
 
 .grid {
@@ -110,4 +132,12 @@
 .grid.d {
   bottom: 0;
   right: 0;
+}
+
+.canvas {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
 }

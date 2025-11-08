@@ -16,6 +16,7 @@ function App() {
   const [stage, setStage] = useState(0)
 
   const [color, setColor] = useState("000000")
+  const [size, setSize] = useState(1)
 
   return (
     <>
@@ -33,10 +34,12 @@ function App() {
 
       </div>
       <div className="grid-container">
-        <Stage0 stage={stage} setStage={setStage}/>
+        <Stage0 stage={stage} setStage={setStage} color={color} size={size} mode0={mode0}/>
       </div>
       <div className="painter-tool">
         <input type="color" value={color} onChange={(e) => setColor(e.target.value)} className="color-picker"/>
+        <input type="range" min="1" max="10" step="0.5" value={size} onChange={(e) => setSize(e.target.value)} className="size-picker"/>
+        <h2 className="size">Size: {size}</h2>
       </div>
     </div>
     </>
