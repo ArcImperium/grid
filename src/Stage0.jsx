@@ -16,11 +16,12 @@ function Stage0({stage, stageRegion, color, size, mode0, handleClick1, fullCanva
             fullCanvas.height = h
             const fctx = fullCanvas.getContext("2d")
             fctx.fillStyle = "#ffffff"
-            fctx.fillRect(0, 0, w, h)
+            fctx.fillRect(0, 0, fullCanvas.width, fullCanvas.height)
             fullCanvasRef.current = fullCanvas
         }
 
         const ctx = canvas.getContext("2d")
+        ctx.imageSmoothingEnabled = false
         ctx.drawImage(fullCanvasRef.current, 0, 0, w, h, 0, 0, w, h)
     }, [])
 
@@ -96,8 +97,7 @@ function Stage0({stage, stageRegion, color, size, mode0, handleClick1, fullCanva
     }
 
     function handleDraw(e) {
-        if (!drawing) {return}
-        if (mode0) {return}
+        if (!drawing || mode0) {return}
 
         const canvas = canvasRef.current
         const ctx = canvas.getContext("2d")
@@ -117,12 +117,61 @@ function Stage0({stage, stageRegion, color, size, mode0, handleClick1, fullCanva
         ctx.stroke()
         ctx.closePath()
 
-        const fctx = fullCanvasRef.current.getContext("2d")
+        const fCanvas = fullCanvasRef.current
+        const fw = fCanvas.width 
+        const fh = fCanvas.height 
+
+        let sx = 0, sy = 0, sw = fw, sh = fh 
+
+        if ((stage === 1) && stageRegion) {
+            sw = fw / 2
+            sh = fh / 2
+
+            if (stageRegion === "b") {sx = sw}
+            if (stageRegion === "c") {sy = sh}
+            if (stageRegion === "d") {sx = sw; sy = sh}
+        }
+        if ((stage === 2) && stageRegion) {
+            const parent = stageRegion[0]
+            const sub = stageRegion[1]
+
+            let px = 0, py = 0
+            if (parent === "b") {px = fw / 2}
+            if (parent === "c") {py = fh / 2}
+            if (parent === "d") {px = fw / 2; py = fh / 2}
+
+            const halfW = fw / 2
+            const halfH = fh / 2
+            const qW = halfW / 2
+            const qH = halfH / 2
+
+            sx = px
+            sy = py
+
+            if (sub === "b") {sx += qW}
+            if (sub === "c") {sy += qH}
+            if (sub === "d") {sx += qW; sy += qH}
+
+            sw = qW
+            sh = qH 
+        }
+
+        const regionScaleX = sw / canvas.width 
+        const regionScaleY = sh / canvas.height 
+
+        const fX = x * regionScaleX + sx
+        const fY = y * regionScaleY + sy
+        const lastX = lastPos.current.x * regionScaleX + sx 
+        const lastY = lastPos.current.y * regionScaleY + sy
+
+        const fctx = fCanvas.getContext("2d")
+        fctx.imageSmoothingEnabled = false
         fctx.beginPath()
-        fctx.moveTo(lastPos.current.x, lastPos.current.y)
-        fctx.lineTo(x, y)
+        fctx.moveTo(lastX, lastY)
+        fctx.lineTo(fX, fY)
         fctx.strokeStyle = color
-        fctx.lineWidth = size
+        const scaleFactor = (regionScaleX + regionScaleY) / 2
+        fctx.lineWidth = size * scaleFactor
         fctx.lineCap = "round"
         fctx.stroke()
         fctx.closePath()
