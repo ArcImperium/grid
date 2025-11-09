@@ -1,6 +1,7 @@
 import {useState, useEffect, useRef} from 'react'
 import './App.css'
 import Stage0 from './Stage0.jsx'
+import Save from './Save.jsx'
 
 function App() {
   useEffect(() => {
@@ -13,15 +14,16 @@ function App() {
   const [mode1, setMode1] = useState(false)
   const [mode2, setMode2] = useState(false)
 
-  const [stage, setStage] = useState(2)
-  const [zoomStack, setZoomStack] = useState([])
-  const currentZoom = zoomStack[zoomStack.length - 1] || null
+  const [stage, setStage] = useState(0)
+  const [stageRegion, setStageRegion] = useState(null)
 
   const [color, setColor] = useState("#000000")
   const [prevColor, setPrevColor] = useState("#000000")
   const [size, setSize] = useState(2)
 
   const fullCanvasRef = useRef(null)
+
+  const [showPopup, setShowPopup] = useState(false)
 
   function setEraser() {
     setPrevColor(color)
@@ -31,28 +33,26 @@ function App() {
     setColor(prevColor)
   }
 
-  function handleClick(q) {
-    setZoomStack(prev => [...prev, q])
-
-    if (q === "a") setStage(0)
-    if (q === "b") setStage(1)
-    if (q === "c") setStage(2)
-    if (q === "d") setStage(3)
+  function handleClick1(region) {
+    if (stage === 0) {
+      setStage(1)
+      setStageRegion(region)
+    }
+    else if (stage === 1) {
+      setStage(2)
+      setStageRegion(prev => prev + region)
+    }
   }
 
   function handleBack() {
-    setZoomStack(prev => {
-    const newStack = prev.slice(0, -1)
-    const lastZoom = newStack[newStack.length - 1] || null
-
-    if (!lastZoom) setStage(2)
-    else if (lastZoom === "a") setStage(0)
-    else if (lastZoom === "b") setStage(1)
-    else if (lastZoom === "c") setStage(2)
-    else if (lastZoom === "d") setStage(3)
-
-    return newStack
-  })
+    if (stage === 2) {
+      setStage(1)
+      setStageRegion(prev => prev[0])
+    }
+    else if (stage === 1) {
+      setStage(0)
+      setStageRegion(null)
+    }
   }
 
   return (
@@ -66,18 +66,19 @@ function App() {
         {mode1 && (<button className="mode-button not">PAINT</button>)}
         {!mode2 && (<button className="mode-button" onClick={() => {setMode0(false); setMode1(false); setMode2(true); setCursorType('pointer'); setEraser()}}>ERASE</button>)}
         {mode2 && (<button className="mode-button not">ERASE</button>)}
-        {((zoomStack.length > 0) && mode0) && (<button className="back" onClick={() => {handleBack()}}>BACK</button>)}
-        {((zoomStack.length === 0) || !mode0) && (<button className="back not">BACK</button>)}
-
+        {mode0 && (<button className="mode-button" onClick={() => {}}>SAVE</button>)}
+        {!mode0 && (<button className="mode-button not">SAVE</button>)}
+        {((stage > 0) && mode0) && (<button className="mode-button" onClick={() => {handleBack()}}>BACK</button>)}
+        {((stage === 0) || !mode0) && (<button className="mode-button not">BACK</button>)}
       </div>
       <div className="grid-container">
-        <Stage0 stage={stage} setStage={setStage} color={color} size={size} mode0={mode0} zoom={currentZoom} handleClick={handleClick} fullCanvasRef={fullCanvasRef}/>
+        <Stage0 stage={stage} stageRegion={stageRegion} color={color} size={size} mode0={mode0} handleClick1={handleClick1} fullCanvasRef={fullCanvasRef}/>
       </div>
       <div className="painter-tool">
         {mode0 && (<input type="color" value={color} onChange={(e) => {setColor(e.target.value); setPrevColor(e.target.value)}} className="color-picker"/>)}
         {!mode0 && (<div className="color-picker-fake" style={{backgroundColor: color}}></div>)}
         <input type="range" min="1" max="20" step="1" value={size} onChange={(e) => {if (mode0) {setSize(e.target.value)}}} className="size-picker"/>
-        <h2 className="size">Size: {size}</h2>
+        <h2 className="size">SIZE: {size}</h2>
       </div>
     </div>
     </>

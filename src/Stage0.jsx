@@ -1,6 +1,6 @@
 import {useState, useRef, useEffect} from "react"
 
-function Stage0({stage, color, size, mode0, zoom, handleClick, fullCanvasRef})  {
+function Stage0({stage, stageRegion, color, size, mode0, handleClick1, fullCanvasRef})  {
     const canvasRef = useRef()
     const [drawing, setDrawing] = useState(false)
     const lastPos = useRef({x: 0, y: 0})
@@ -29,26 +29,50 @@ function Stage0({stage, color, size, mode0, zoom, handleClick, fullCanvasRef})  
         const canvas = canvasRef.current 
         const ctx = canvas.getContext("2d")
         const w = canvas.width 
-        const h = canvas.height 
+        const h = canvas.height
 
         const fCanvas = fullCanvasRef.current
         const fw = fCanvas.width 
         const fh = fCanvas.height 
 
-        ctx.clearRect(0, 0, w, h)
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-        if (!zoom) {
-            ctx.drawImage(fCanvas, 0, 0, fw, fh, 0, 0, w, h)
-            return
+        let sx = 0, sy = 0, sw = fw, sh = fh
+
+        if (stage === 1 && stageRegion) {
+            sw = fw / 2
+            sh = fh / 2
+            if (stageRegion === "b") {sx = sw}
+            if (stageRegion === "c") {sy = sh}
+            if (stageRegion === "d") {sx = sw; sy = sh}
+        }
+        if (stage === 2 && stageRegion) {
+            const parent = stageRegion[0]
+            const sub = stageRegion[1]
+
+            let px = 0, py = 0
+
+            if (parent === "b") {px = fw / 2}
+            if (parent === "c") {py = fh / 2}
+            if (parent === "d") {px = fw / 2; py = fh / 2}
+
+            const halfW = fw / 2
+            const halfH = fh / 2
+            const qW = halfW / 2
+            const qH = halfH / 2
+            sx = px
+            sy = py
+
+            if (sub === "b") {sx += qW}
+            if (sub === "c") {sy += qH}
+            if (sub === "d") {sx += qW; sy += qH}
+
+            sw = qW
+            sh = qH
         }
 
-        let sx = 0, sy = 0, sw = fw / 2, sh = fh / 2
-        if (zoom === "b") {sx = fw / 2}
-        if (zoom === "c") {sy = fh / 2}
-        if (zoom === "d") {sx = fw / 2; sy = fh / 2}
-
         ctx.drawImage(fCanvas, sx, sy, sw, sh, 0, 0, w, h)
-    }, [zoom])
+    }, [stage, stageRegion])
 
     function handleMouseActive(e) {
         if (mode0) {return}
@@ -108,11 +132,11 @@ function Stage0({stage, color, size, mode0, zoom, handleClick, fullCanvasRef})  
     
     return(
         <>
-        {((stage >= 0) && mode0) && (<>
-        <div className="grid a" onClick={() => {handleClick("a")}}></div>
-        <div className="grid b" onClick={() => {handleClick("b")}}></div>
-        <div className="grid c" onClick={() => {handleClick("c")}}></div>
-        <div className="grid d" onClick={() => {handleClick("d")}}></div>
+        {((stage < 2) && mode0) && (<>
+        <div className="grid a" onClick={() => {handleClick1("a")}}></div>
+        <div className="grid b" onClick={() => {handleClick1("b")}}></div>
+        <div className="grid c" onClick={() => {handleClick1("c")}}></div>
+        <div className="grid d" onClick={() => {handleClick1("d")}}></div>
         </>)}
         <canvas className="canvas" ref={canvasRef} onMouseMove={handleDraw} onMouseDown={handleMouseActive} onMouseUp={handleMouseInactive} onMouseLeave={handleMouseInactive}/>
         </>
