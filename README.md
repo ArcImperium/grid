@@ -1,3 +1,12 @@
+Your imagination is the limit to what you create (also the size of the canvas).
+Draw on the firt stage of the canvas, or zoom in to get finer details.
+For clarification, to zoom in, zoom out, select color, select paintbrush size, or save image, you MUST be in 'SELECT' mode.
+In 'PAINT' or 'ERASE' mode, you can only paint or erase on the canvas.
+The canvas may distort the finer details after zooming out.
+After clicking the 'SAVE' button, you can preview your artwork and confirm your download, or exit the screen.
+The paint selection side panel allows you to change colors by clicking on the color (default black) and using the built in color picker, and you can move the slider to change paintbrush size.
+That should be all; unleash your inner creativity.
+
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
