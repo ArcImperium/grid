@@ -1,0 +1,81 @@
+.save-background {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+
+    background-color: midnightblue;
+    opacity: 0.8;
+    z-index: 100;
+}
+
+.save-container {
+    position: fixed;
+    height: 90%;
+    width: 90%;
+    top: 5%;
+    left: 5%;
+
+    background-color: midnightblue;
+    border-radius: 50px;
+    z-index: 101;
+}
+
+.preview {
+    position: absolute;
+    height: 90%;
+    aspect-ratio: 1/1;
+    top: 5%;
+    left: 5%;
+}
+
+.download {
+    position: absolute;
+    height: 20%;
+    width: 30%;
+    right: 10%;
+    bottom: 10%;
+
+    background-color: white;
+    border-color: transparent;
+    border-radius: 25px;
+    font-size: 40px;
+    color: midnightblue;
+
+    transition: transform 1s ease;
+}
+.download:hover {
+    transform: scale(1.2);
+}
+
+.exit {
+    position: fixed;
+    height: 10%;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    top: 2.5%;
+    right: 4%;
+
+    background-color: white;
+    border-color: transparent;
+    font-size: 25px;
+    color: midnightblue;
+
+    transition: transform 0.5s ease;
+}
+.exit:hover {
+    transform: scale(1.1);
+}
+
+.confirm {
+    position: absolute;
+    height: 60%;
+    width: 50%;
+    top: 10%;
+    right: 0;
+
+    font-size: 50px;
+    text-align: center;
+    color: white;
+}

@@ -24,6 +24,7 @@ function App() {
   const fullCanvasRef = useRef(null)
 
   const [showPopup, setShowPopup] = useState(false)
+  const [preview, setPreview] = useState(null)
 
   function setEraser() {
     setPrevColor(color)
@@ -55,8 +56,27 @@ function App() {
     }
   }
 
+  function handlePreview() {
+    const canvas = fullCanvasRef.current
+    if (!canvas) {return}
+    const image = canvas.toDataURL("image/png")
+    setPreview(image)
+  }
+  function handleDownload() {
+    const canvas = fullCanvasRef.current 
+    if (!canvas) {return}
+    const image = canvas.toDataURL("image/png")
+    const link = document.createElement("a")
+    link.href = image
+    link.download = "grid_painting.png"
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
   return (
     <>
+    {showPopup && (<Save handleDownload={handleDownload} setShowPopup={setShowPopup} preview={preview}/>)}
     <div className="layer" style={{cursor: cursorType}}>
       <div className="sidebar">
         <div style={{height: '5%'}}></div>
@@ -66,7 +86,7 @@ function App() {
         {mode1 && (<button className="mode-button not">PAINT</button>)}
         {!mode2 && (<button className="mode-button" onClick={() => {setMode0(false); setMode1(false); setMode2(true); setCursorType('pointer'); setEraser()}}>ERASE</button>)}
         {mode2 && (<button className="mode-button not">ERASE</button>)}
-        {mode0 && (<button className="mode-button" onClick={() => {}}>SAVE</button>)}
+        {mode0 && (<button className="mode-button" onClick={() => {setShowPopup(true); handlePreview()}}>SAVE</button>)}
         {!mode0 && (<button className="mode-button not">SAVE</button>)}
         {((stage > 0) && mode0) && (<button className="mode-button" onClick={() => {handleBack()}}>BACK</button>)}
         {((stage === 0) || !mode0) && (<button className="mode-button not">BACK</button>)}
